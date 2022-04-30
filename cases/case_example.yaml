@@ -1,22 +1,8 @@
-TestBrowserChromeAV:
+OpenChromeGoogle:
+  Step: I open chrome and navigate to google
   Roles:
     - Role: desktopChrome
-      Capabilities:
-        chromeOptions:
-          args:
-            - use-fake-ui-for-media-stream
-            - use-fake-device-for-media-stream
-            - no-sandbox
-            # - use-file-for-fake-audio-capture=/user/silence.wav
-            # - use-file-for-fake-video-capture=/Users/user/Downloads/1080p-5fps.mjpeg
       App: desktop
   Actions:
     - Type: navigate
-      Role: desktopChrome
-      Value: https://webcamtests.com/
-    - Type: click
-      Strategy: id
-      Role: desktopChrome
-      Id: webcam-launcher
-    - Type: sleep
-      Time: 10
+      Value: https://google.com
