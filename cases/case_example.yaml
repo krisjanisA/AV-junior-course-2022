@@ -1,8 +1,0 @@
-OpenChromeGoogle:
-  Step: I open chrome and navigate to google
-  Roles:
-    - Role: desktopChrome
-      App: desktop
-  Actions:
-    - Type: navigate
-      Value: https://google.com

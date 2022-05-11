@@ -1,0 +1,27 @@
+StartCallMeet:
+  Step: I open Meet Echo and register
+  Roles:
+    - Role: desktopChrome,desktopChrome1
+      Capabilities:
+        chromeOptions:
+          args:
+            - use-fake-ui-for-media-stream
+            - use-fake-device-for-media-stream
+            - no-sandbox
+            - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
+      App: desktop
+  Actions:  
+    - Type: navigate
+      Role: desktopChrome
+      Value: https://janus.conf.meetecho.com/videocalltest.html
+    - Type: click
+      Role: desktopChrome
+      Strategy: css
+      Id: "#start"
+    - Type: send_keys
+      Role: desktopChrome
+      Strategy: css
+      Id: "#username"
+      Value: TestAmigo
+    - Type: sleep
+      Time: 3

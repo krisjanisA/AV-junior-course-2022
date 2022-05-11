@@ -1,0 +1,46 @@
+OpenChromeGoogle:
+  Step: I open chrome and navigate to google
+  Roles:
+    - Role: desktopChrome
+      App: desktop
+  Actions:
+    - Type: navigate
+      Value: https://google.com
+    - Type: maximize
+    - Type: click
+      Strategy: css 
+      Id: "button[id=\"L2AGLb\"]"
+      NoRaise: true
+      Time: 3
+    - Type: send_keys
+      Strategy: css
+      Id: "input[name='q']"
+      Value: TestRay
+    - Type: click
+      Strategy: css
+      Id: "input[name='q']"
+    - Type: click
+      Strategy: css
+      Id: "[class='aajZCb'] [name='btnK']"
+    - Type: sleep
+      Time: 3
+
+TestMyWebcam:
+  Roles:
+    - Role: desktopChrome
+      Capabilities:
+        chromeOptions:
+          args:
+            - use-fake-ui-for-media-stream
+            - use-fake-device-for-media-stream
+            - no-sandbox
+            - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
+      App: desktop
+  Actions:
+    - Type: navigate
+      Value: https://webcamtests.com/
+    - Type: click
+      Strategy: css
+      Id: "#webcam-launcher"
+    - Type: sleep
+      Time: 10

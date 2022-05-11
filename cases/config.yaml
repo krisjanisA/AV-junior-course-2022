@@ -6,7 +6,7 @@ Apps:
     Activity: com.android.vending.AssetBrowserActivity
 
 Devices:
-  - role: desktopChrome
+  - role: desktopChrome,desktopChrome1
     browser: chrome
   - role: desktopFirefox
     browser: firefox
