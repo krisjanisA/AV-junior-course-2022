@@ -1,5 +1,57 @@
+StartCall: 
+  Step: I register the User 
+  Roles:
+    - Role: desktopChrome
+      Capabilities:
+        chromeOptions:
+          args:
+            - use-fake-ui-for-media-stream
+            - use-fake-device-for-media-stream
+            - no-sandbox
+            - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
+      App: desktop
+  Actions:  
+    - Type: navigate
+      Value: https://janus.conf.meetecho.com/videocalltest.html
+    - Type: click
+      Strategy: css
+      Id: "#start"
+    - Type: send_keys
+      Strategy: css
+      Id: "#username"
+      Value: $AND_CLI_USERNAME$
+    - Type: click
+      Strategy: css
+      Id: "#register"
+
+CreateCall:
+  Step: I create a call with the Sender User
+  Roles:
+    - Role: desktopChrome1
+      Capabilities:
+        chromeOptions:
+          args:
+            - use-fake-ui-for-media-stream
+            - use-fake-device-for-media-stream
+            - no-sandbox
+            - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
+      App: desktop
+  Actions:
+    - Type: send_keys
+      Strategy: css
+      Id: "#peer"
+      Value: $AND_CLI_USER_1$
+    - Type: click
+      Strategy: css
+      Id: "[id=\"call\"]"
+    - Type: sleep
+      Time: 5
+
 StartCallMeet:
   Step: I open Meet Echo and register
+  Vars:
+    USER_1: John
+    USER_2: Peter
   Roles:
     - Role: desktopChrome,desktopChrome1
       Capabilities:
@@ -11,17 +63,10 @@ StartCallMeet:
             - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
       App: desktop
   Actions:  
-    - Type: navigate
-      Role: desktopChrome
-      Value: https://janus.conf.meetecho.com/videocalltest.html
-    - Type: click
-      Role: desktopChrome
-      Strategy: css
-      Id: "#start"
-    - Type: send_keys
-      Role: desktopChrome
-      Strategy: css
-      Id: "#username"
-      Value: TestAmigo
-    - Type: sleep
-      Time: 3
+    - When: I register the User
+      Vars:
+        USERNAME: $AND_CLI_USER_1$
+    - And: I register the User
+      Role: desktopChrome1
+      Vars:
+        USERNAME: $AND_CLI_USER_2$
