@@ -2,13 +2,6 @@ StartCall:
   Step: I register the User 
   Roles:
     - Role: desktopChrome
-      Capabilities:
-        chromeOptions:
-          args:
-            - use-fake-ui-for-media-stream
-            - use-fake-device-for-media-stream
-            - no-sandbox
-            - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
       App: desktop
   Actions:  
     - Type: navigate
@@ -28,13 +21,6 @@ CreateCall:
   Step: I create a call with the Sender User
   Roles:
     - Role: desktopChrome1
-      Capabilities:
-        chromeOptions:
-          args:
-            - use-fake-ui-for-media-stream
-            - use-fake-device-for-media-stream
-            - no-sandbox
-            - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
       App: desktop
   Actions:
     - Type: send_keys
@@ -44,24 +30,48 @@ CreateCall:
     - Type: click
       Strategy: css
       Id: "[id=\"call\"]"
-    - Type: sleep
-      Time: 5
+
+AnswerCall:
+  Step: I answer a call with the Receiver User
+  Roles:
+    - Role: desktopChrome
+      App: desktop
+  Actions:
+    - Type: click
+      Strategy: xpath
+      Id: "//button[text()='Answer']"
+
+GetUsername:
+  Step: I get the Sender username and log this info in a text file 
+  Roles:
+    - Role: desktopChrome1
+      App: desktop 
+    - Role: commandLine
+      App: command 
+  Actions:
+    - Type: get_text
+      Role: desktopChrome1
+      Strategy: css
+      Id: "[id='youok']"
+      Greps:
+        - var: SENDER_USERNAME
+          condition: nempty
+          remove: "Registered as"
+          match: "(.*)"
+    - Type: command
+      Role: commandLine
+      Value: echo $AND_CLI_SENDER_USERNAME$ > users.txt
 
 StartCallMeet:
   Step: I open Meet Echo and register
   Vars:
-    USER_1: John
-    USER_2: Peter
+    USER_1: KrisAmigos
+    USER_2: PeterisAmigos
   Roles:
     - Role: desktopChrome,desktopChrome1
-      Capabilities:
-        chromeOptions:
-          args:
-            - use-fake-ui-for-media-stream
-            - use-fake-device-for-media-stream
-            - no-sandbox
-            - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
       App: desktop
+    - Role: commandLine
+      App: command 
   Actions:  
     - When: I register the User
       Vars:
@@ -70,3 +80,8 @@ StartCallMeet:
       Role: desktopChrome1
       Vars:
         USERNAME: $AND_CLI_USER_2$
+    - And: I create a call with the Sender User
+    - Then: I answer a call with the Receiver User
+    - And: I get the Sender username and log this info in a text file 
+    - Type: sleep
+      Time: 5

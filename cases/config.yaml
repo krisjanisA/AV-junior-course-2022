@@ -7,6 +7,14 @@ Apps:
 
 Devices:
   - role: desktopChrome,desktopChrome1
+    capabilities:
+        chromeOptions:
+          args:
+            - use-fake-ui-for-media-stream
+            - use-fake-device-for-media-stream
+            - no-sandbox
+            - use-file-for-fake-audio-capture=/user/silence.wav
+            - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
     browser: chrome
   - role: desktopFirefox
     browser: firefox
