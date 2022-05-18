@@ -1,0 +1,100 @@
+StartCall: 
+  Step: I register the User 
+  Roles:
+    - Role: desktopChrome
+      App: desktop
+  Actions:  
+    - Type: navigate
+      Value: https://janus.conf.meetecho.com/videocalltest.html
+    - Type: click
+      Strategy: css
+      Id: "#start"
+    - Type: send_keys
+      Strategy: css
+      Id: "#username"
+      Value: $AND_CLI_USERNAME$
+    - Type: click
+      Strategy: css
+      Id: "#register"
+
+CreateCall:
+  Step: I create a call with the Sender User
+  Roles:
+    - Role: desktopChrome1
+      App: desktop
+  Actions:
+    - Type: send_keys
+      Strategy: css
+      Id: "#peer"
+      Value: $AND_CLI_USER_1$
+    - Type: click
+      Strategy: css
+      Id: "[id=\"call\"]"
+    - Type: minimize
+
+AnswerCall:
+  Step: I answer a call with the Receiver User
+  Roles:
+    - Role: desktopChrome
+      App: desktop
+  Actions:
+    - Type: click
+      Strategy: xpath
+      Id: "//button[text()='Answer']"
+    - Type: maximize
+
+GetUsername:
+  Step: I get the Sender username and log this info in a text file 
+  Roles:
+    - Role: desktopChrome1
+      App: desktop 
+    - Role: commandLine
+      App: command 
+  Actions:
+    - Type: get_text
+      Role: desktopChrome1
+      Strategy: css
+      Id: "[id='youok']"
+      Greps:
+        - var: SENDER_USERNAME
+          condition: nempty
+          remove: "Registered as"
+          match: "(.*)"
+    - Type: command
+      Role: commandLine
+      Value: echo $AND_CLI_SENDER_USERNAME$ > users.txt
+
+Recordings:
+  Step: I start recording audio, video and traces
+  Roles:
+    - Role: commandLine
+      App: command
+  Actions:
+    - Type: command 
+      Value: "tshark -Q -i \"$AND_CLI_INTERFACE$\" -w trace.pcapng -a duration:$AND_CLI_TIME$"
+      Detach: true
+    - Type: command
+      Value: "sox -q -r 44100 -t coreaudio \"default\" callDegraded.wav trim 0 $AND_CLI_TIME$"
+      Detach: true
+    - Type: command
+      Value: "ffmpeg -v quiet -y -f avfoundation -t $AND_CLI_TIME$ -i \"$AND_CLI_VIDEO_IN$:\" output.mkv"
+
+Analysis:
+  Step: I start analysing audio, video and traces
+  Roles:
+    - Role: commandLine
+      App: command
+  Actions:
+    - Type: command
+      Value: sox call.wav -b 16 call_16b.wav
+    - Type: command
+      Value: docker run --rm -v /$AND_CMD_pwd$/:/home alvarolaserna/visqol:1.0 ./visqol.sh /home/call_16b.wav /home/call_16b.wav
+      Greps:
+        - var: MOS_SCORE
+          condition: nempty
+          remove: "MOS-LQO:"
+          match: "MOS-LQO:(.*)"
+    - Type: command
+      Value: echo $AND_CLI_MOS_SCORE$ > mos.txt
+    - Type: command
+      Value: tshark -r trace.pcapng -qz io,stat,1 > trace.txt

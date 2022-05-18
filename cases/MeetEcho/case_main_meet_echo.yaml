@@ -1,72 +1,11 @@
-StartCall: 
-  Step: I register the User 
-  Roles:
-    - Role: desktopChrome
-      App: desktop
-  Actions:  
-    - Type: navigate
-      Value: https://janus.conf.meetecho.com/videocalltest.html
-    - Type: click
-      Strategy: css
-      Id: "#start"
-    - Type: send_keys
-      Strategy: css
-      Id: "#username"
-      Value: $AND_CLI_USERNAME$
-    - Type: click
-      Strategy: css
-      Id: "#register"
-
-CreateCall:
-  Step: I create a call with the Sender User
-  Roles:
-    - Role: desktopChrome1
-      App: desktop
-  Actions:
-    - Type: send_keys
-      Strategy: css
-      Id: "#peer"
-      Value: $AND_CLI_USER_1$
-    - Type: click
-      Strategy: css
-      Id: "[id=\"call\"]"
-
-AnswerCall:
-  Step: I answer a call with the Receiver User
-  Roles:
-    - Role: desktopChrome
-      App: desktop
-  Actions:
-    - Type: click
-      Strategy: xpath
-      Id: "//button[text()='Answer']"
-
-GetUsername:
-  Step: I get the Sender username and log this info in a text file 
-  Roles:
-    - Role: desktopChrome1
-      App: desktop 
-    - Role: commandLine
-      App: command 
-  Actions:
-    - Type: get_text
-      Role: desktopChrome1
-      Strategy: css
-      Id: "[id='youok']"
-      Greps:
-        - var: SENDER_USERNAME
-          condition: nempty
-          remove: "Registered as"
-          match: "(.*)"
-    - Type: command
-      Role: commandLine
-      Value: echo $AND_CLI_SENDER_USERNAME$ > users.txt
-
 StartCallMeet:
   Step: I open Meet Echo and register
   Vars:
     USER_1: KrisAmigos
     USER_2: PeterisAmigos
+    TIME: 10
+    INTERFACE: en0
+    VIDEO_IN: 1
   Roles:
     - Role: desktopChrome,desktopChrome1
       App: desktop
@@ -82,6 +21,6 @@ StartCallMeet:
         USERNAME: $AND_CLI_USER_2$
     - And: I create a call with the Sender User
     - Then: I answer a call with the Receiver User
-    - And: I get the Sender username and log this info in a text file 
-    - Type: sleep
-      Time: 5
+    - And: I get the Sender username and log this info in a text file
+    - And: I start recording audio, video and traces 
+    - And: I start analysing audio, video and traces

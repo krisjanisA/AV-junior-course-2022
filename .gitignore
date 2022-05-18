@@ -2,3 +2,7 @@ Reports
 cucumber_report.html
 .DS_Store
 *.txt
+*.wav
+*.html
+*.mkv
+*.pcapng

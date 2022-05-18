@@ -6,7 +6,7 @@ Apps:
     Activity: com.android.vending.AssetBrowserActivity
 
 Devices:
-  - role: desktopChrome,desktopChrome1
+  - role: desktopChrome
     capabilities:
         chromeOptions:
           args:
@@ -14,6 +14,16 @@ Devices:
             - use-fake-device-for-media-stream
             - no-sandbox
             - use-file-for-fake-audio-capture=/user/silence.wav
+            - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
+    browser: chrome
+  - role: desktopChrome1
+    capabilities:
+        chromeOptions:
+          args:
+            - use-fake-ui-for-media-stream
+            - use-fake-device-for-media-stream
+            - no-sandbox
+            - use-file-for-fake-audio-capture=/Users/krisjanisalbergs/Desktop/AV_course/AVCourse/call.wav
             - use-file-for-fake-video-capture=/Users/krisjanisalbergs/Desktop/AV_course/output.mjpeg
     browser: chrome
   - role: desktopFirefox
